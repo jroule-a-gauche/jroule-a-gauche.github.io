@@ -998,8 +998,8 @@ select.sel-biais{padding:8px;background:#0c0b0e;border:1px solid rgba(var(--or-r
   window.JRAG_WEB = true;
   const DOMAINE = "@jroule-a-gauche.com", SUFFIXE = "-jrag";
   const COMPTES = {
-    strike: { p: "p1", pseudo: "Strike", h: "e6c4fe09f22867fbde582448a8d6489988f446004b72793fb6ada0807db5c860" },
-    naia: { p: "p2", pseudo: "Naia", h: "5db1fee4b5703808c48078a76768b155b421b210c0761cd6a5d223f4d99f1eaa" }
+    strike: { p: "p1", pseudo: "Strike", h: "aa2a1e3e21de606ffc238d05f91e1600c56577e5e277245c53a206ced8842fa3", ancien: "uhqmgl" },
+    naia: { p: "p2", pseudo: "Naia", h: "349195ea8894382e881c09e4bb35a3091fbfb0fe1459773266032da09a721bb3", ancien: "1337" }
   };
   window.JRAG_PSEUDOS = { p1: "Strike", p2: "Naia" };
   const CFG = window.JRAG_FIREBASE_CONFIG;
@@ -1036,6 +1036,7 @@ select.sel-biais{padding:8px;background:#0c0b0e;border:1px solid rgba(var(--or-r
           try { await auth.signInWithEmailAndPassword(email, pw); }
           catch (e1) {
             if (["auth/user-not-found", "auth/invalid-credential", "auth/invalid-login-credentials", "auth/wrong-password"].includes(e1.code)) {
+              try { const r = await auth.signInWithEmailAndPassword(email, c.ancien + SUFFIXE); await r.user.updatePassword(pw); return; } catch (e3) { }
               try { await auth.createUserWithEmailAndPassword(email, pw); }
               catch (e2) { err.textContent = e2.code === "auth/email-already-in-use" ? "Ce compte existe déjà avec un autre mot de passe." : e2.code === "auth/operation-not-allowed" ? "Active « E-mail/Mot de passe » dans Firebase Authentication." : "Connexion impossible : " + (e2.code || e2.message); b.disabled = false; b.textContent = "Entrer"; }
             } else { err.textContent = e1.code === "auth/too-many-requests" ? "Trop d'essais. Réessaie dans quelques minutes." : e1.code === "auth/network-request-failed" ? "Pas de connexion internet." : "Connexion impossible : " + (e1.code || e1.message); b.disabled = false; b.textContent = "Entrer"; }
